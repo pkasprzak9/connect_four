@@ -5,6 +5,8 @@ require_relative './board'
 class Game
   attr_reader :board, :players
 
+  PIECES = %w[x o]
+
   def initialize(board, turn = 0)
     @board = board
     @turn = turn
@@ -13,16 +15,67 @@ class Game
 
   def play_game
     introduction
-    choose_names
+    create_players
   end
 
-  def choose_names
-    2.times do |t|
-      puts "\n\e[32mChoose a name for player #{t + 1}"
-      user_name = gets.chomp
-      player_key = "player#{t + 1}".to_sym
-      @players[player_key][:name] = user_name
+  def create_players
+    2.times do |player|
+      player += 1
+      choose_name(player)
+      choose_piece(player)
     end
+  end
+
+  def choose_name(player)
+    player_key = "player#{player}".to_sym
+    puts "\n\e[32mChoose a name for player #{player}"
+    verified_name = verify_name
+    set_name(verified_name, player_key)
+  end
+
+  def verify_name
+    loop do
+      user_name = gets.chomp
+      if user_name != ''
+        return user_name
+      else
+        puts 'Name cannot be empty. Please enter a valid name.'
+      end
+    end
+  end
+
+  def set_name(name, player)
+    @players[player][:name] = name
+  end
+
+  def choose_piece(player)
+    piece1 = PIECES[0]
+    piece2 = PIECES[1]
+    player_key = "player#{player}".to_sym
+    puts "\n\e[32mChoose a piece for player #{player}\nAvailable pieces: '#{piece1}' or '#{piece2}'"
+    loop do
+      user_piece = gets.chomp
+      verified_piece = verify_piece(piece1, piece2, user_piece)
+      if verified_piece
+        assign_piece(verified_piece, player_key)
+        break
+      end
+      puts "INPUT ERROR: players can choose '#{piece1}' or '#{piece2}' and piece can not be same as other players"
+    end
+  end
+
+  def assign_piece(piece, player)
+    players[player][:piece] = piece
+  end
+
+  def verify_piece(piece1, piece2, user_piece)
+    user_piece if (user_piece == piece1 || user_piece == piece2) && available?(user_piece)
+  end
+
+  def available?(piece)
+    return false if players[:player1][:piece] == piece || players[:player2][:piece] == piece
+
+    true
   end
 
   private
@@ -41,8 +94,3 @@ class Game
     HERODOC
   end
 end
-
-# board = Board.new
-# game = Game.new(board)
-# game.play_game
-# p game.players
