@@ -97,4 +97,6 @@ describe Game do
       end
     end
   end
+  context 'Game rules' do
+  end
 end

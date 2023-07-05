@@ -24,9 +24,25 @@ class Board
     while row >= 0
       if row_empty?(row, column)
         @grid[row][column] = value
-        break
+        return [row, column]
       end
       row -= 1
+    end
+    nil
+  end
+
+  def four_in_row?(row, column, value)
+    directions = [[-1, -1], [-1, 0], [-1, 1], [0, -1], [0, 1], [1, -1], [1, 0], [1, 1]]
+
+    directions.any? do |d_row, d_column|
+      1.upto(3).all? do |i|
+        new_row = row + d_row * i
+        new_column = column + d_column * i
+
+        next false if new_row.negative? || new_row >= ROWS || new_column.negative? || new_column >= COLUMNS
+
+        @grid[new_row][new_column] == value
+      end
     end
   end
 
@@ -49,10 +65,3 @@ class Board
     grid[row][column].nil?
   end
 end
-
-# board = Board.new
-# board.drop_piece(1, 'x')
-# board.drop_piece(2, 'x')
-# board.drop_piece(2, 'x')
-# board.drop_piece(6, 'x')
-# board.display_board

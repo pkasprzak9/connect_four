@@ -102,4 +102,31 @@ describe Board do
       end
     end
   end
+
+  describe '#four_in_row?' do
+    context 'when there are four pieces in a row' do
+      context 'when the pieces are alligned horizontally' do
+        subject(:board_horizontal) { described_class.new }
+        it 'returns true' do
+          piece = 'x'
+          board.drop_piece(1, piece)
+          board.drop_piece(2, piece)
+          board.drop_piece(3, piece)
+          row, column = board.drop_piece(4, piece)
+          expect(board.four_in_row?(row, column, piece)).to be true
+        end
+      end
+      context 'when the pieces are alligned vertically' do
+        subject(:board_horizontal) { described_class.new }
+        it 'returns true' do
+          piece = 'x'
+          board.drop_piece(1, piece)
+          board.drop_piece(1, piece)
+          board.drop_piece(1, piece)
+          row, column = board.drop_piece(1, piece)
+          expect(board.four_in_row?(row, column, piece)).to be true
+        end
+      end
+    end
+  end
 end

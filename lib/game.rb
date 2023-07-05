@@ -78,6 +78,10 @@ class Game
     true
   end
 
+  def game_over?(row, column, piece)
+    board.four_in_row?(row, column, piece)
+  end
+
   private
 
   def introduction
