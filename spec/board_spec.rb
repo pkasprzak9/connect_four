@@ -4,14 +4,15 @@ require_relative '../lib/board'
 
 describe Board do
   subject(:board) { described_class.new }
-  describe '#initialize' do
-    it 'initializes the board with 7 columns and 6 rows' do
+  describe '#set_up' do
+    it 'sets up the board with 7 columns and 6 rows' do
       correct_grid = [[nil, nil, nil, nil, nil, nil, nil],
                       [nil, nil, nil, nil, nil, nil, nil],
                       [nil, nil, nil, nil, nil, nil, nil],
                       [nil, nil, nil, nil, nil, nil, nil],
                       [nil, nil, nil, nil, nil, nil, nil],
                       [nil, nil, nil, nil, nil, nil, nil]]
+      board.set_up
       expect(board.grid).to eql(correct_grid)
     end
   end
@@ -77,6 +78,27 @@ describe Board do
       it 'returns nil' do
         value = 'x'
         expect(board.drop_piece(1, value)).to be_nil
+      end
+    end
+  end
+
+  describe '#display_board' do
+    let(:output) { StringIO.new }
+    before do
+      $stdout = output
+    end
+
+    after do
+      $stdout = STDOUT
+    end
+
+    context 'when the board is empty' do
+      it 'displays an empty board correctly' do
+        board.display_board
+        empty_cell = "\e[32m| "
+        empty_row = "#{empty_cell * 7}|\n"
+        expected_output = empty_row * 6
+        expect(output.string).to eq(expected_output)
       end
     end
   end
