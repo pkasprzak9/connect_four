@@ -4,7 +4,7 @@ require_relative '../lib/game'
 require_relative '../lib/board'
 
 describe Game do
-  context 'Creating players' do
+  context 'CREATING PLAYERS' do
     let(:board) { instance_double(Board) }
     describe '#choose_name' do
       subject(:game_choose) { described_class.new(board) }
@@ -97,8 +97,8 @@ describe Game do
       end
     end
   end
-  context 'Game rules' do
-    describe 'game_over?' do
+  context 'GAME RULES' do
+    describe '#game_over?' do
       let(:board) { instance_double(Board) }
       subject(:game_over) { described_class.new(board) }
       context 'when there are four consecutive pieces' do
@@ -115,6 +115,57 @@ describe Game do
         end
         it 'returns false' do
           expect(game_over.game_over?(1, 1, 'x')).to eq(false)
+        end
+      end
+    end
+    describe '#turn_order' do
+      let(:board) { instance_double('Board') }
+      subject(:game_turn_order) { described_class.new(board) }
+      before do
+        allow(game_turn_order).to receive(:players).and_return(
+          { player1: { piece: 'x' },
+            player2: { piece: 'o' } }
+        )
+        allow(game_turn_order).to receive(:puts)
+        allow(board).to receive(:display_board)
+        allow(game_turn_order).to receive(:select_column).and_return(3)
+        allow(board).to receive(:drop_piece).and_return(3, 'x')
+        allow(game_turn_order).to receive(:game_over?).and_return(false, false, true)
+      end
+      it 'loops through players and makes moves until the game is over' do
+        expect(board).to receive(:display_board).exactly(3).times
+        expect(game_turn_order).to receive(:select_column).exactly(3).times
+        expect(board).to receive(:drop_piece).exactly(3).times
+        expect(game_turn_order).to receive(:game_over?).exactly(3).times
+
+        game_turn_order.turn_order
+      end
+    end
+    describe '#select_column' do
+      let(:board) { instance_double(Board) }
+      subject(:game_select_column) { described_class.new(board) }
+      before do
+        allow(game_select_column).to receive(:puts)
+      end
+
+      context 'when user selects a valid column' do
+        before do
+          allow(game_select_column).to receive(:gets).and_return('3')
+        end
+
+        it 'returns the selected column' do
+          selected_column = game_select_column.select_column
+          expect(selected_column).to eq('3')
+        end
+      end
+      context 'when user selects a invalid column' do
+        before do
+          allow(game_select_column).to receive(:gets).and_return('10')
+        end
+
+        it 'returns nil' do
+          selected_column = game_select_column.select_column
+          expect(selected_column).to be_nil
         end
       end
     end

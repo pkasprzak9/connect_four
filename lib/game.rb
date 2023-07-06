@@ -16,6 +16,8 @@ class Game
   def play_game
     introduction
     create_players
+    turn_order
+    puts 'game over'
   end
 
   def create_players
@@ -78,8 +80,31 @@ class Game
     true
   end
 
+  def turn_order
+    @game_over = false
+    until @game_over
+      players.each do |_player, player_info|
+        piece = player_info[:piece]
+        board.display_board
+        selected_column = select_column
+        row, column = board.drop_piece(selected_column, piece)
+        @game_over = game_over?(row, column, piece)
+        break if @game_over
+      end
+    end
+  end
+
   def game_over?(row, column, piece)
     board.four_in_row?(row, column, piece)
+  end
+
+  def select_column
+    available_columns = (1..7)
+    chosen_column = gets.chomp.to_i
+    verified_column = chosen_column if available_columns.include?(chosen_column)
+    return verified_column if verified_column
+
+    puts "\e[32INPUT ERROR!\nPlease select a column from 1 to 7"
   end
 
   private
