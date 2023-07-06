@@ -84,12 +84,15 @@ class Game
     @game_over = false
     until @game_over
       players.each do |_player, player_info|
-        piece = player_info[:piece]
         board.display_board
+        break if @game_over
+
+        name = player_info[:name]
+        piece = player_info[:piece]
+        display_turn_info(name)
         selected_column = select_column
         row, column = board.drop_piece(selected_column, piece)
         @game_over = game_over?(row, column, piece)
-        break if @game_over
       end
     end
   end
@@ -99,12 +102,19 @@ class Game
   end
 
   def select_column
-    available_columns = (1..7)
-    chosen_column = gets.chomp.to_i
-    verified_column = chosen_column if available_columns.include?(chosen_column)
-    return verified_column if verified_column
+    @verified_column = nil
+    until @verified_column
+      available_columns = (1..7)
+      chosen_column = gets.chomp.to_i
+      @verified_column = chosen_column if available_columns.include?(chosen_column)
+      return @verified_column if @verified_column
 
-    puts "\e[32INPUT ERROR!\nPlease select a column from 1 to 7"
+      puts "\e[32INPUT ERROR!\nPlease select a column from 1 to 7"
+    end
+  end
+
+  def display_turn_info(name)
+    puts "\n#{name}'s turn"
   end
 
   private
@@ -122,4 +132,5 @@ class Game
           4. Have fun and good luck!\e[0m
     HERODOC
   end
+
 end

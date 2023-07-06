@@ -123,20 +123,22 @@ describe Game do
       subject(:game_turn_order) { described_class.new(board) }
       before do
         allow(game_turn_order).to receive(:players).and_return(
-          { player1: { piece: 'x' },
-            player2: { piece: 'o' } }
+          { player1: { name: 'Jan', piece: 'x' },
+            player2: { name: 'Paweł', piece: 'o' } }
         )
         allow(game_turn_order).to receive(:puts)
         allow(board).to receive(:display_board)
         allow(game_turn_order).to receive(:select_column).and_return(3)
         allow(board).to receive(:drop_piece).and_return(3, 'x')
+        allow(game_turn_order).to receive(:display_turn_info)
         allow(game_turn_order).to receive(:game_over?).and_return(false, false, true)
       end
       it 'loops through players and makes moves until the game is over' do
-        expect(board).to receive(:display_board).exactly(3).times
+        expect(board).to receive(:display_board).exactly(4).times
         expect(game_turn_order).to receive(:select_column).exactly(3).times
         expect(board).to receive(:drop_piece).exactly(3).times
         expect(game_turn_order).to receive(:game_over?).exactly(3).times
+        expect(game_turn_order).to receive(:display_turn_info).exactly(3).times
 
         game_turn_order.turn_order
       end
@@ -155,7 +157,7 @@ describe Game do
 
         it 'returns the selected column' do
           selected_column = game_select_column.select_column
-          expect(selected_column).to eq('3')
+          expect(selected_column).to eq(3)
         end
       end
       context 'when user selects a invalid column' do
