@@ -118,32 +118,30 @@ describe Game do
         end
       end
     end
-    describe '#turn_order' do
-      let(:board) { instance_double('Board') }
-      subject(:game_turn_order) { described_class.new(board) }
-      before do
-        allow(game_turn_order).to receive(:players).and_return(
-          { player1: { name: 'Jan', piece: 'x' },
-            player2: { name: 'Paweł', piece: 'o' } }
-        )
-        allow(game_turn_order).to receive(:puts)
-        allow(board).to receive(:display_board)
-        allow(game_turn_order).to receive(:select_column).and_return(3)
-        allow(board).to receive(:drop_piece).and_return(3, 'x')
-        allow(game_turn_order).to receive(:display_turn_info)
-        allow(game_turn_order).to receive(:game_over?).and_return(false, false, true)
-      end
-      it 'loops through players and makes moves until the game is over' do
-        expect(board).to receive(:display_board).exactly(4).times
-        expect(game_turn_order).to receive(:select_column).exactly(3).times
-        expect(board).to receive(:drop_piece).exactly(3).times
-        expect(game_turn_order).to receive(:game_over?).exactly(3).times
-        expect(game_turn_order).to receive(:display_turn_info).exactly(3).times
 
+    describe '#turn_order' do
+      subject(:game_turn_order) { described_class.new(board) }
+      let(:board) { double('Board') }
+
+      before do
+        allow(game_turn_order).to receive(:process_player_turn)
+        allow(board).to receive(:display_board)
+      end
+
+      it 'processes each player\'s turn' do
+        allow(game_turn_order).to receive(:game_over?).and_return(false, false, true)
+        expect(game_turn_order).to receive(:process_player_turn).exactly(3).times # Adds first iteration
+        game_turn_order.turn_order
+      end
+
+      it 'stops looping when the game_over? is true' do
+        allow(game_turn_order).to receive(:game_over?).and_return(true)
+        expect(game_turn_order).to receive(:process_player_turn).once
         game_turn_order.turn_order
       end
     end
-    describe '#select_column' do
+
+    describe '#select_column_or_quit' do
       let(:board) { instance_double(Board) }
       subject(:game_select_column) { described_class.new(board) }
       before do
@@ -156,19 +154,62 @@ describe Game do
         end
 
         it 'returns the selected column' do
-          selected_column = game_select_column.select_column
+          selected_column = game_select_column.select_column_or_quit
           expect(selected_column).to eq(3)
         end
       end
-      context 'when user selects a invalid column' do
+      context 'when user enters quit' do
         before do
-          allow(game_select_column).to receive(:gets).and_return('10')
+          allow(game_select_column).to receive(:gets).and_return("quit\n")
         end
 
-        it 'returns nil' do
-          selected_column = game_select_column.select_column
-          expect(selected_column).to be_nil
+        it 'returns :quit' do
+          selected_column = game_select_column.select_column_or_quit
+          expect(selected_column).to eq(:quit)
         end
+      end
+    end
+
+    describe '#process_player_turn' do
+      let(:board) { instance_double(Board) }
+      let(:player_info) { { name: 'Paweł', piece: 'x' } }
+      subject(:game_player_turn) { described_class.new(board) }
+
+      before do
+        allow(game_player_turn).to receive(:display_turn_info)
+      end
+
+      context 'when player chooses a valid column' do
+        before do
+          allow(game_player_turn).to receive(:select_column_or_quit).and_return(3)
+        end
+        it 'calls #make_move with the selected column and player\'s piece' do
+          expect(game_player_turn).to receive(:make_move).with(3, 'x')
+          game_player_turn.process_player_turn(player_info)
+        end
+      end
+
+      context 'when user enters quit' do
+        before do
+          allow(game_player_turn).to receive(:select_column_or_quit).and_return(:quit)
+        end
+
+        it 'calls quit_game' do
+          expect(game_player_turn).to receive(:quit_game)
+          game_player_turn.process_player_turn(player_info)
+        end
+      end
+    end
+
+    describe '#make_move' do
+      let(:board) { instance_double(Board) }
+      subject(:game_move) { described_class.new(board) }
+
+      it 'calls #drop_piece method' do
+        piece = 'x'
+        column = 1
+        expect(board).to receive(:drop_piece).with(column, piece)
+        game_move.make_move(column, piece)
       end
     end
   end
