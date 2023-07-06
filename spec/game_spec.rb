@@ -98,5 +98,25 @@ describe Game do
     end
   end
   context 'Game rules' do
+    describe 'game_over?' do
+      let(:board) { instance_double(Board) }
+      subject(:game_over) { described_class.new(board) }
+      context 'when there are four consecutive pieces' do
+        before do
+          allow(board).to receive(:four_in_row?).and_return true
+        end
+        it 'returns true' do
+          expect(game_over.game_over?(1, 1, 'x')).to eq(true)
+        end
+      end
+      context 'when there are four consecutive pieces' do
+        before do
+          allow(board).to receive(:four_in_row?).and_return false
+        end
+        it 'returns false' do
+          expect(game_over.game_over?(1, 1, 'x')).to eq(false)
+        end
+      end
+    end
   end
 end
