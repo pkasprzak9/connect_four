@@ -1,3 +1,4 @@
 # ignores the saves files
 *.yaml
 tempCodeRunnerFile.rb
+examples.txt
