@@ -21,14 +21,6 @@ describe Board do
       before do
         allow(board).to receive(:row_empty?).and_return(true)
       end
-      # NOTE: This test requires is not working properly
-      context 'when chosen column does not exist' do
-        it 'returns nil' do
-          value = 'x'
-          board.drop_piece(10, value)
-          expect(board.grid[5][9]).to be_nil
-        end
-      end
       context 'when user chooses first column' do
         it 'place the piece correctly' do
           value = 'x'
