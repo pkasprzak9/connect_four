@@ -1,56 +1,66 @@
-# Connect Four Game in Ruby
+# Connect Four
 
-This repository contains a simple implementation of the classic Connect Four game in Ruby.
+Connect Four is a classic board game where two players take turns dropping their pieces into a grid, attempting to connect four of their pieces in a row, column, or diagonal. This repository contains a Ruby implementation of the game that can be played in the terminal.
 
-## Repository Structure
+## Table of Contents
 
-- `lib/` - Contains the main game logic.
-    - `board.rb` - Contains the logic for the game board.
-    - `database.rb` - (Placeholder) Will contain the logic for saving and loading game progress.
-    - `game.rb` - Contains the main game logic.
-- `spec/` - Contains the test files.
-    - `board_spec.rb` - Contains tests for the board logic.
-    - `database_spec.rb` - (Placeholder) Will contain tests for the database module.
-    - `game_spec.rb` - Contains tests for the game logic.
-- `main.rb` - The main entry point of the game.
-- `.rspec` - RSpec configuration file.
+- [How to Play](#how-to-play)
+- [Features](#features)
+- [Installation](#installation)
+- [Usage](#usage)
+- [To-Do](#to-do)
+- [Contributing](#contributing)
 
-## Getting Started
+## How to Play
 
-1. Clone the repository.
+Connect Four is played on a vertical board, which has seven columns and six rows. The objective of the game is to be the first to form a horizontal, vertical, or diagonal line of four of one's own discs.
+
+1. Players take turns dropping their symbols into columns.
+2. Enter the column number (1 to 7) and press Enter to drop the symbol.
+3. Type 'quit' if you wish to quit the game. You will have the option to save the game before quitting.
+4. Connect four symbols in a row horizontally, vertically, or diagonally to win.
+5. Have fun and good luck!
+
+## Features
+
+- **Customizable Player Names**: Players can choose their own names.
+- **Piece Selection**: Players can choose their pieces (either 'x' or 'o').
+- **Dynamic Board Display**: The board is displayed after each move, showing the current state of the game.
+- **Save Game Progress**: Players can save the game progress before quitting.
+- **Error Handling**: The game handles invalid inputs and prompts the user to enter valid data.
+
+## Installation
+
+To play Connect Four, you need to have Ruby installed on your machine. Follow these steps to get the game running:
+
+1. Clone this repository to your local machine.
+   ```
+   git clone https://github.com/pkasprzak9/connect_four.git
+   ```
 2. Navigate to the repository directory.
-3. Run `ruby main.rb` to start the game.
+   ```
+   cd connect_four
+   ```
+
+## Usage
+
+Run the game by executing the `main.rb` file with Ruby:
+
+```
+ruby main.rb
+```
+
+Follow the on-screen instructions to play the game.
 
 ## To-Do
 
-- **Add Database Module**: Implement a database module in `lib/database.rb` to save and load game progress. This module should allow players to save the current state of the game and resume it later. Don't forget to add tests for this module in `spec/database_spec.rb`.
-
-- **Handle Draw Condition**: Update the game logic in `lib/game.rb` to handle the scenario where the game ends in a draw (i.e., the board is full and no player has won).
-
-- **Improve Column Selection Logic**: Update the board logic in `lib/board.rb` to handle cases where a player selects a full column. Instead of wasting the player's turn, prompt the player to choose a different column.
-
-- **Improve User Interface**: Work on the user interface to make the game more engaging and user-friendly. Consider adding colors, animations, and user prompts.
-
-## Insights for Future Development
-
-- **AI Opponent**: Implement an AI opponent that players can play against. This can be done using algorithms like Minimax for decision making.
-
-- **Customizable Board Size**: Allow players to customize the size of the board before starting the game.
-
-- **Online Multiplayer**: Implement the ability to play the game over a network, allowing two players on different machines to play against each other.
-
-- **Game Statistics**: Keep track of player statistics such as wins, losses, and draws. Display these statistics at the end of each game.
-
-- **Undo Move**: Implement an undo feature that allows players to take back their last move.
-
-- **Themes and Customization**: Allow players to choose different themes and customize the appearance of the game board and pieces.
-
-- **Accessibility Features**: Implement features that make the game accessible to a wider range of players, such as screen reader support and alternative input methods.
+- Implement the `load_from_YAML` method to allow players to load a saved game.
+- Implement a feature to play against the computer (AI).
+- Add more customization options for players (e.g., custom symbols, board size).
+- Implement a scoring system to keep track of wins and losses.
+- Enhance the user interface for a better gaming experience.
 
 ## Contributing
 
-Contributions are welcome! Feel free to submit a pull request or create an issue to discuss any changes or improvements.
+Contributions are welcome! If you have an idea for improving the game or want to fix a bug, feel free to fork the repository and submit a pull request.
 
-## Contribution
-
-https://github.com/pkasprzak9
