@@ -27,7 +27,7 @@ describe Game do
           allow(game_verify).to receive(:gets).and_return('Agnieszka')
         end
         it 'return name' do
-          message = 'Name cannot be empty. Please enter a valid name.'
+          message = "\nName cannot be empty. Please enter a valid name."
           expect(game_verify).not_to receive(:puts).with(message)
           game_verify.verify_name
         end
@@ -38,7 +38,7 @@ describe Game do
           allow(game_verify).to receive(:gets).and_return('', 'Agnieszka')
         end
         it 'display error message once' do
-          message = 'Name cannot be empty. Please enter a valid name.'
+          message = "\nName cannot be empty. Please enter a valid name."
           expect(game_verify).to receive(:puts).with(message).once
           game_verify.verify_name
         end
@@ -147,6 +147,7 @@ describe Game do
       subject(:game_select_column) { described_class.new(board) }
       before do
         allow(game_select_column).to receive(:puts)
+        allow(board).to receive(:column_full?)
       end
 
       context 'when user selects a valid column' do

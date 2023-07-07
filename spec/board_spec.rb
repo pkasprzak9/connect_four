@@ -21,6 +21,7 @@ describe Board do
       before do
         allow(board).to receive(:row_empty?).and_return(true)
       end
+      # NOTE: This test requires is not working properly
       context 'when chosen column does not exist' do
         it 'returns nil' do
           value = 'x'
@@ -95,7 +96,7 @@ describe Board do
     context 'when the board is empty' do
       it 'displays an empty board correctly' do
         board.display_board
-        empty_cell = "\e[32m| "
+        empty_cell = "| "
         empty_row = "#{empty_cell * 7}|\n"
         expected_output = empty_row * 6
         expect(output.string).to eq(expected_output)
