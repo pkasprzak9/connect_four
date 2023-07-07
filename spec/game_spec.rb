@@ -213,6 +213,7 @@ describe Game do
         game_move.make_move(column, piece)
       end
     end
+
     describe '#quit_game' do
       let(:board) { instance_double(Board) }
       subject(:game_quit) { described_class.new(board) }
@@ -249,6 +250,32 @@ describe Game do
         allow(game_quit).to receive(:gets).and_return('no')
         expect(game_quit).to receive(:puts).with(quit_message)
         game_quit.quit_game
+      end
+    end
+
+    describe '#save_to_YAML' do
+      let(:board) { instance_double(Board) }
+      let(:file_path) { './log/saves.yaml' }
+      let(:content) { 'some content' }
+      subject(:game_save) { described_class.new(board) }
+
+      before do
+        allow(game_save).to receive(:dump_to_YAML).and_return(content)
+      end
+
+      it 'saves content to a file' do
+        expect(File).to receive(:open).with(file_path, 'w')
+        game_save.save_to_YAML
+      end
+
+      context 'when there\'s an error message' do
+        before do
+          allow(File).to receive(:open).and_raise(SystemCallError.new('error message'))
+        end
+
+        it 'outputs the error message' do
+          expect { game_save.save_to_YAML }.to output(/Error while saving the progress./).to_stdout
+        end
       end
     end
   end
