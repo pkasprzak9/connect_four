@@ -20,7 +20,6 @@ class Game
     introduction
     create_players
     turn_order
-    puts 'game over'
   end
 
   def create_players
@@ -33,7 +32,7 @@ class Game
 
   def choose_name(player)
     player_key = "player#{player}".to_sym
-    puts "\n\e[32mChoose a name for player #{player}"
+    puts "\nChoose a name for player #{player}"
     verified_name = verify_name
     set_name(verified_name, player_key)
   end
@@ -44,7 +43,7 @@ class Game
       if user_name != ''
         return user_name
       else
-        puts 'Name cannot be empty. Please enter a valid name.'
+        puts "\nName cannot be empty. Please enter a valid name."
       end
     end
   end
@@ -57,7 +56,7 @@ class Game
     piece1 = PIECES[0]
     piece2 = PIECES[1]
     player_key = "player#{player}".to_sym
-    puts "\n\e[32mChoose a piece for player #{player}\nAvailable pieces: '#{piece1}' or '#{piece2}'"
+    puts "\nChoose a piece for player #{player}\nAvailable pieces: '#{piece1}' or '#{piece2}'"
     loop do
       user_piece = gets.chomp
       verified_piece = verify_piece(piece1, piece2, user_piece)
@@ -65,7 +64,7 @@ class Game
         assign_piece(verified_piece, player_key)
         break
       end
-      puts "INPUT ERROR: players can choose '#{piece1}' or '#{piece2}' and piece can not be same as other players"
+      puts "\nINPUT ERROR: players can choose '#{piece1}' or '#{piece2}' and piece can not be same as other players"
     end
   end
 
@@ -124,11 +123,16 @@ class Game
       return :quit if input == 'quit'
 
       chosen_column = input.to_i
-      @verified_column = chosen_column if available_columns.include?(chosen_column)
+      @verified_column = chosen_column if verify_column(available_columns, chosen_column)
       return @verified_column if @verified_column
 
-      puts "\e[32INPUT ERROR!\nPlease select a column from 1 to 7"
+      puts "\nINPUT ERROR!\nPlease select a column from 1 to 7" unless available_columns.include?(chosen_column)
+      puts "\nINPUT ERROR!\nSelected column is full.\nPlease select different column" if board.column_full?(chosen_column)
     end
+  end
+
+  def verify_column(available_columns, column)
+    available_columns.include?(column) && !board.column_full?(column)
   end
 
   def display_turn_info(name)
@@ -136,11 +140,11 @@ class Game
   end
 
   def quit_game
-    puts "\e[32mWould you like to save the progress (yes/no)\e[0m"
+    puts "\nWould you like to save the progress (yes/no)"
     answer = gets.chomp
     puts answer
     save_to_YAML if answer == 'yes'
-    puts "\e[32mQuiting game..."
+    puts "\nQuiting game..."
     exit
   end
 
@@ -148,15 +152,15 @@ class Game
 
   def introduction
     puts <<~HERODOC
-      \e[32m\e[1m
-      Welcome to CONNECT FOUR game!\e[0m
 
-      \e[32m\e[1mGame Instructions:\e[0m
+      Welcome to CONNECT FOUR game!
 
-          \e[35m1. Players take turns dropping their symbols into columns.
+      Game Instructions:
+
+          1. Players take turns dropping their symbols into columns.
           2. Enter the column number and press Enter to drop the symbol or quit to quit the game.
           3. Connect four symbols in a row horizontally, vertically, or diagonally to win.
-          4. Have fun and good luck!\e[0m
+          4. Have fun and good luck!
     HERODOC
   end
 end

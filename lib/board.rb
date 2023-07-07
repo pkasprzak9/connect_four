@@ -5,7 +5,7 @@ class Board
 
   ROWS = 6
   COLUMNS = 7
-  EMPTY_CELL_COLOR = "\e[32m"
+  EMPTY_CELL_COLOR = ""
   SEPARATOR = '|'
 
   def initialize
@@ -19,7 +19,6 @@ class Board
   def drop_piece(column, value)
     column -= 1
     row = grid.size - 1
-    return if column.negative? || column >= grid.first.size
 
     while row >= 0
       if row_empty?(row, column)
@@ -28,7 +27,6 @@ class Board
       end
       row -= 1
     end
-    nil
   end
 
   def four_in_row?(row, column, value)
@@ -57,6 +55,11 @@ class Board
       end
       puts SEPARATOR
     end
+  end
+
+  def column_full?(column)
+    column -= 1
+    !grid[0][column].nil?
   end
 
   private
