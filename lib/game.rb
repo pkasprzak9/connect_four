@@ -1,8 +1,10 @@
 # frozen_string_literal: false
 
 require_relative './board'
+require_relative './database'
 
 class Game
+  include DataBase
   attr_reader :board, :players
 
   PIECES = %w[x o]
@@ -137,11 +139,9 @@ class Game
     puts "\e[32mWould you like to save the progress (yes/no)\e[0m"
     answer = gets.chomp
     puts answer
-    if asnwer == 'yes'
-      save_to_YAML
-    else
-      return nil
-     end
+    save_to_YAML if answer == 'yes'
+    puts "\e[32mQuiting game..."
+    exit
   end
 
   private

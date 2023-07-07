@@ -2,6 +2,7 @@
 
 require_relative '../lib/game'
 require_relative '../lib/board'
+require_relative '../lib/database'
 
 describe Game do
   context 'CREATING PLAYERS' do
@@ -210,6 +211,44 @@ describe Game do
         column = 1
         expect(board).to receive(:drop_piece).with(column, piece)
         game_move.make_move(column, piece)
+      end
+    end
+    describe '#quit_game' do
+      let(:board) { instance_double(Board) }
+      subject(:game_quit) { described_class.new(board) }
+
+      before do
+        allow(game_quit).to receive(:puts)
+        allow(game_quit).to receive(:save_to_YAML)
+      end
+
+      context 'when user wants to save progress' do
+        it 'calls save_to_YAML' do
+          allow(game_quit).to receive(:gets).and_return('yes')
+          expect(game_quit).to receive(:save_to_YAML)
+          game_quit.quit_game
+        end
+      end
+
+      context 'when user does not want to save progress' do
+        it 'does not call save_to_YAML' do
+          allow(game_quit).to receive(:gets).and_return('no')
+          expect(game_quit).not_to receive(:save_to_YAML)
+          game_quit.quit_game
+        end
+      end
+
+      it 'prints a message asking if the user wants to save the progress' do
+        allow(game_quit).to receive(:gets).and_return('no')
+        expect(game_quit).to receive(:puts).with("\e[32mWould you like to save the progress (yes/no)\e[0m")
+        game_quit.quit_game
+      end
+
+      it 'prints a quit message' do
+        quit_message = "\e[32mQuiting game...]"
+        allow(game_quit).to receive(:gets).and_return('no')
+        expect(game_quit).to receive(:puts).with(quit_message)
+        game_quit.quit_game
       end
     end
   end
