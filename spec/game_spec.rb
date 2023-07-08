@@ -279,5 +279,33 @@ describe Game do
         end
       end
     end
+
+    describe '#load_from_YAML' do
+      let(:board) { instance_double(Board) }
+      subject(:game_load) { described_class.new(board) }
+      let(:yaml_data) do
+        {
+          'players' => { player1: {}, player2: {} },
+          'turn' => 0,
+          'winner' => nil,
+          'grid' => Array.new(6) { Array.new(7) }
+        }
+      end
+      before do
+        allow(File).to receive(:exist?).and_return(true)
+        allow(YAML).to receive(:load_file).and_return(yaml_data)
+        allow(board).to receive(:grid=)
+      end
+
+      it 'loads data from YAML file' do
+        game_load.load_from_YAML
+        expect(YAML).to have_received(:load_file).with(DataBase::SAVE_FILE)
+        expect(subject.players).to eq(yaml_data['players'])
+        expect(subject.turn).to eq(yaml_data['turn'])
+        expect(subject.winner).to eq(yaml_data['winner'])
+        expect(board).to have_received(:grid=).with(yaml_data['grid'])
+      end
+
+    end
   end
 end

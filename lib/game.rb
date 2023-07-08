@@ -5,7 +5,7 @@ require_relative './database'
 
 class Game
   include DataBase
-  attr_reader :board, :players
+  attr_reader :board, :players, :turn, :winner
 
   PIECES = %w[x o]
 
@@ -164,3 +164,7 @@ class Game
     HERODOC
   end
 end
+
+board = Board.new()
+game = Game.new(board)
+game.load_from_YAML

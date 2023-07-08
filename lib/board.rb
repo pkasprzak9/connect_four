@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Board
-  attr_reader :grid
+  attr_accessor :grid
 
   ROWS = 6
   COLUMNS = 7

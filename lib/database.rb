@@ -3,25 +3,30 @@
 require 'yaml'
 
 module DataBase
+  SAVE_FILE = './log/saves.yaml'.freeze
+
   def save_to_YAML
-    File.open('./log/saves.yaml', 'w') { |f| f.write dump_to_YAML }
+    game_date = {
+      'players' => @players,
+      'turn' => @turn,
+      'winner' => @winner,
+      'grid' => @board.grid
+    }
+    File.open(SAVE_FILE, 'w') { |f| f.write(game_date.to_yaml) }
   rescue SystemCallError => e
     puts 'Error while saving the progress.'
     puts e
   end
 
   def load_from_YAML
-
-  end
-
-  private
-
-  def dump_to_YAML
-    YAML.dump(
-      'players' => @players,
-      'turns' => @turn,
-      'winner' => @winner,
-      'board' => @board
-    )
+    if File.exist?(SAVE_FILE)
+      data = YAML.load_file(SAVE_FILE)
+      @players = data['players']
+      @turn = data['turn']
+      @winner = data['winner']
+      @board.grid = data['grid']
+    else
+      puts "No saved games to load."
+    end
   end
 end
