@@ -7,7 +7,7 @@ class Game
   include DataBase
   attr_reader :board, :players, :turn, :winner
 
-  PIECES = %w[x o]
+  PIECES = %w[x o].freeze
 
   def initialize(board, turn = 0)
     @board = board
