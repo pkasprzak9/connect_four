@@ -54,7 +54,6 @@ Follow the on-screen instructions to play the game.
 
 ## To-Do
 
-- Implement the `load_from_YAML` method to allow players to load a saved game.
 - Implement a feature to play against the computer (AI).
 - Add more customization options for players (e.g., custom symbols, board size).
 - Implement a scoring system to keep track of wins and losses.
