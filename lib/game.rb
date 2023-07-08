@@ -183,7 +183,3 @@ class Game
     HERODOC
   end
 end
-
-board = Board.new
-game = Game.new(board)
-game.play_game
