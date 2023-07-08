@@ -18,8 +18,27 @@ class Game
 
   def play_game
     introduction
-    create_players
+    create_players unless load_game
     turn_order
+  end
+
+  def load_game
+    puts "\nWould you like to laod the previous game (yes/no)?"
+    loop do
+      answer = verify_answer(gets.chomp)
+      if answer
+        load_from_YAML
+        return true
+      end
+
+      puts "\nINPUT ERROR: Please enter a valid answer"
+    end
+    false
+  end
+
+  def verify_answer(answer)
+    availabe_answers = %w[yes no]
+    availabe_answers.include?(answer)
   end
 
   def create_players
@@ -165,6 +184,6 @@ class Game
   end
 end
 
-board = Board.new()
+board = Board.new
 game = Game.new(board)
-game.load_from_YAML
+game.play_game
