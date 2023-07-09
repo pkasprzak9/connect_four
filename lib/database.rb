@@ -3,7 +3,7 @@
 require 'yaml'
 
 module DataBase
-  SAVE_FILE = './log/saves.yaml'.freeze
+  SAVE_FILE = '../log/saves.yaml'.freeze
 
   def save_to_YAML
     game_date = {

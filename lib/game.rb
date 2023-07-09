@@ -183,7 +183,6 @@ class Game
   def quit_game
     puts "\nWould you like to save the progress (yes/no)"
     answer = gets.chomp
-    puts answer
     save_to_YAML if answer == 'yes'
     puts "\nQuiting game..."
     exit
