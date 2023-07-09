@@ -26,7 +26,11 @@ module DataBase
       @winner = data['winner']
       @board.grid = data['grid']
     else
-      puts "No saved games to load."
+      puts 'No saved games to load.'
     end
+  end
+
+  def clear_save_file
+    File.delete(SAVE_FILE) if File.exist?(SAVE_FILE)
   end
 end

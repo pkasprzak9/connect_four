@@ -18,7 +18,7 @@ class Game
 
   def play_game
     introduction
-    create_players unless load_game
+    create_players unless (load_game if File.exist?(SAVE_FILE))
     turn_order
   end
 
@@ -28,6 +28,7 @@ class Game
       answer = verify_answer(gets.chomp)
       if answer
         load_from_YAML
+        clear_save_file
         return true
       end
 
