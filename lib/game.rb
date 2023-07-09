@@ -34,7 +34,7 @@ class Game
   end
 
   def play_again?
-    puts "\nWould you like to play again"
+    puts "\nWould you like to play again(yes/no)?"
     answer = verify_answer(gets.chomp) until answer
     return true if answer == 'yes'
 
@@ -101,8 +101,8 @@ class Game
     loop do
       user_piece = gets.chomp
       verified_piece = verify_piece('1', '2', user_piece)
-      verified_piece = "\e[34m\u25cf\e[0m" if verified_piece == '1'
-      verified_piece = "\e[33m\u25cf\e[0m" if verified_piece == '2'
+      verified_piece = PIECES[0] if verified_piece == '1'
+      verified_piece = PIECES[1] if verified_piece == '2'
       if verified_piece
         assign_piece(verified_piece, player_key)
         break
@@ -129,11 +129,14 @@ class Game
     game_over = false
     until game_over
       players.each do |_player, player_info|
-        board.display_board
-        break if game_over
 
         row, column = process_player_turn(player_info)
         game_over = game_over?(row, column, player_info[:piece])
+        board.display_board
+        if game_over
+          puts "#{player_info[:name]} WINS!"
+          break
+        end
       end
     end
   end
