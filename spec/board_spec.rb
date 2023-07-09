@@ -88,8 +88,8 @@ describe Board do
     context 'when the board is empty' do
       it 'displays an empty board correctly' do
         board.display_board
-        empty_cell = "| "
-        empty_row = "#{empty_cell * 7}|\n"
+        empty_cell = "\u25cb "
+        empty_row = "#{empty_cell * 7}\n"
         expected_output = empty_row * 6
         expect(output.string).to eq(expected_output)
       end

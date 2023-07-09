@@ -59,10 +59,10 @@ describe Game do
       subject(:game_verify_piece) { described_class.new(board) }
       before do
         allow(game_verify_piece).to receive(:puts)
-        allow(game_verify_piece).to receive(:gets).and_return('x')
+        allow(game_verify_piece).to receive(:gets).and_return('1')
       end
       it 'calls #assign_piece with correct piece' do
-        expect(game_verify_piece).to receive(:assign_piece).with('x', :player1)
+        expect(game_verify_piece).to receive(:assign_piece).with("\e[34m\u25cf\e[0m", :player1)
         game_verify_piece.choose_piece(1)
       end
     end
