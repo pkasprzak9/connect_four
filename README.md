@@ -8,6 +8,7 @@ Connect Four is a classic board game where two players take turns dropping their
 - [Features](#features)
 - [Installation](#installation)
 - [Usage](#usage)
+- [Bugs to be Fixed](#bugs-to-be-fixed)
 - [To-Do](#to-do)
 - [Contributing](#contributing)
 
@@ -52,6 +53,10 @@ ruby main.rb
 
 Follow the on-screen instructions to play the game.
 
+## Bugs to be Fixed
+
+- Currently, no bugs have been identified.
+
 ## To-Do
 
 - Implement a feature to play against the computer (AI).
@@ -62,4 +67,3 @@ Follow the on-screen instructions to play the game.
 ## Contributing
 
 Contributions are welcome! If you have an idea for improving the game or want to fix a bug, feel free to fork the repository and submit a pull request.
-
