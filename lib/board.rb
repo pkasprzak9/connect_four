@@ -55,6 +55,9 @@ class Board
       end
       puts "\n"
     end
+    1.upto(COLUMNS) do |i|
+      print "#{i} "
+    end
   end
 
   def column_full?(column)
