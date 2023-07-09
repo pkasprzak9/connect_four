@@ -20,26 +20,47 @@ class Game
     introduction
     create_players unless (load_game if File.exist?(SAVE_FILE))
     turn_order
+    if play_again?
+      clear_game
+      play_game
+    end
+  end
+
+  def clear_game
+    @board.set_up
+    @players = { player1: {}, player2: {} }
+    @turn = 0
+    @winner = nil
+  end
+
+  def play_again?
+    puts "\nWould you like to play again"
+    answer = verify_answer(gets.chomp) until answer
+    return true if answer == 'yes'
+
+    false
   end
 
   def load_game
     puts "\nWould you like to laod the previous game (yes/no)?"
     loop do
       answer = verify_answer(gets.chomp)
-      if answer
+      if answer == 'yes'
         load_from_YAML
         clear_save_file
         return true
+      elsif answer == 'no'
+        clear_save_file
+        return false
       end
-
-      puts "\nINPUT ERROR: Please enter a valid answer"
     end
     false
   end
 
   def verify_answer(answer)
     availabe_answers = %w[yes no]
-    availabe_answers.include?(answer)
+    puts "\nINPUT ERROR: Please enter a valid answer" unless availabe_answers.include?(answer)
+    answer if availabe_answers.include?(answer)
   end
 
   def create_players
