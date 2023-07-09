@@ -1,12 +1,13 @@
 # frozen_string_literal: true
 
+require_relative './input_output'
+
 class Board
+  include InputOutput
   attr_accessor :grid
 
   ROWS = 6
   COLUMNS = 7
-  EMPTY_CELL_COLOR = "\u25cb"
-  SEPARATOR = '|'
 
   def initialize
     set_up
@@ -58,6 +59,7 @@ class Board
     1.upto(COLUMNS) do |i|
       print "#{i} "
     end
+    puts "\n"
   end
 
   def column_full?(column)

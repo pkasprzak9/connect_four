@@ -2,12 +2,13 @@
 
 require_relative './board'
 require_relative './database'
+require_relative './input_output'
 
 class Game
   include DataBase
-  attr_reader :board, :players, :turn, :winner
-
-  PIECES = ["\e[34m\u25cf\e[0m", "\e[33m\u25cf\e[0m"].freeze
+  include InputOutput
+  attr_reader :board, :players, :turn
+  attr_accessor :winner
 
   def initialize(board, turn = 0)
     @board = board
@@ -24,43 +25,7 @@ class Game
       clear_game
       play_game
     end
-  end
-
-  def clear_game
-    @board.set_up
-    @players = { player1: {}, player2: {} }
-    @turn = 0
-    @winner = nil
-  end
-
-  def play_again?
-    puts "\nWould you like to play again(yes/no)?"
-    answer = verify_answer(gets.chomp) until answer
-    return true if answer == 'yes'
-
-    false
-  end
-
-  def load_game
-    puts "\nWould you like to laod the previous game (yes/no)?"
-    loop do
-      answer = verify_answer(gets.chomp)
-      if answer == 'yes'
-        load_from_YAML
-        clear_save_file
-        return true
-      elsif answer == 'no'
-        clear_save_file
-        return false
-      end
-    end
-    false
-  end
-
-  def verify_answer(answer)
-    availabe_answers = %w[yes no]
-    puts "\nINPUT ERROR: Please enter a valid answer" unless availabe_answers.include?(answer)
-    answer if availabe_answers.include?(answer)
+    quit_game
   end
 
   def create_players
@@ -73,7 +38,7 @@ class Game
 
   def choose_name(player)
     player_key = "player#{player}".to_sym
-    puts "\nChoose a name for player #{player}"
+    ask_for_name_message(player)
     verified_name = verify_name
     set_name(verified_name, player_key)
   end
@@ -81,11 +46,9 @@ class Game
   def verify_name
     loop do
       user_name = gets.chomp
-      if user_name != ''
-        return user_name
-      else
-        puts "\nName cannot be empty. Please enter a valid name."
-      end
+      return user_name if user_name != ''
+
+      empty_name_error
     end
   end
 
@@ -97,7 +60,7 @@ class Game
     piece1 = PIECES[0]
     piece2 = PIECES[1]
     player_key = "player#{player}".to_sym
-    puts "\nChoose a piece for player #{player}\nAvailable pieces: '1': #{piece1}' or '2': #{piece2}'"
+    choose_piece_message(player, piece1, piece2)
     loop do
       user_piece = gets.chomp
       verified_piece = verify_piece('1', '2', user_piece)
@@ -107,7 +70,7 @@ class Game
         assign_piece(verified_piece, player_key)
         break
       end
-      puts "\nINPUT ERROR: players can choose '1': #{piece1}' or '2': #{piece2}' and piece can not be same as other players"
+      choose_piece_error(piece1, piece2)
     end
   end
 
@@ -125,16 +88,53 @@ class Game
     true
   end
 
+  def clear_game
+    @board.set_up
+    @players = { player1: {}, player2: {} }
+    @turn = 0
+    @winner = nil
+  end
+
+  def play_again?
+    play_again_message
+    answer = verify_answer(gets.chomp) until answer
+    return true if answer == 'yes'
+
+    false
+  end
+
+  def load_game
+    load_game_message
+    loop do
+      answer = verify_answer(gets.chomp)
+      if answer == 'yes'
+        load_from_YAML
+        clear_save_file
+        return true
+      elsif answer == 'no'
+        clear_save_file
+        return false
+      end
+    end
+    false
+  end
+
+  def verify_answer(answer)
+    availabe_answers = %w[yes no]
+    invalid_answer_error unless availabe_answers.include?(answer)
+    answer if availabe_answers.include?(answer)
+  end
+
   def turn_order
     game_over = false
     until game_over
-      players.each do |_player, player_info|
-
+      players.each do |player, player_info|
         row, column = process_player_turn(player_info)
         game_over = game_over?(row, column, player_info[:piece])
         board.display_board
         if game_over
-          puts "#{player_info[:name]} WINS!"
+          @winner = player
+          display_winner(player_info)
           break
         end
       end
@@ -172,8 +172,8 @@ class Game
       @verified_column = chosen_column if verify_column(available_columns, chosen_column)
       return @verified_column if @verified_column
 
-      puts "\nINPUT ERROR!\nPlease select a column from 1 to 7" unless available_columns.include?(chosen_column)
-      puts "\nINPUT ERROR!\nSelected column is full.\nPlease select different column" if board.column_full?(chosen_column)
+      invalid_column_error unless available_columns.include?(chosen_column)
+      full_column_error if board.column_full?(chosen_column)
     end
   end
 
@@ -181,31 +181,9 @@ class Game
     available_columns.include?(column) && !board.column_full?(column)
   end
 
-  def display_turn_info(name)
-    puts "\nRound: #{@turn}\n#{name}'s turn"
-  end
-
   def quit_game
-    puts "\nWould you like to save the progress (yes/no)"
-    answer = gets.chomp
-    save_to_YAML if answer == 'yes'
-    puts "\nQuiting game..."
+    save_to_YAML if (ask_to_save == 'yes' if @winner.nil?)
+    quit_message
     exit
-  end
-
-  private
-
-  def introduction
-    puts <<~HERODOC
-
-      Welcome to CONNECT FOUR game!
-
-      Game Instructions:
-
-          1. Players take turns dropping their symbols into columns.
-          2. Enter the column number and press Enter to drop the symbol or quit to quit the game.
-          3. Connect four symbols in a row horizontally, vertically, or diagonally to win.
-          4. Have fun and good luck!
-    HERODOC
   end
 end
