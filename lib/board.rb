@@ -5,7 +5,7 @@ class Board
 
   ROWS = 6
   COLUMNS = 7
-  EMPTY_CELL_COLOR = ""
+  EMPTY_CELL_COLOR = "\u25cb"
   SEPARATOR = '|'
 
   def initialize
@@ -48,12 +48,12 @@ class Board
     ROWS.times do |row|
       COLUMNS.times do |column|
         if grid[row][column].nil?
-          print "#{EMPTY_CELL_COLOR}#{SEPARATOR} "
+          print "#{EMPTY_CELL_COLOR} "
         else
-          print "#{SEPARATOR}#{grid[row][column]}"
+          print "#{grid[row][column]} "
         end
       end
-      puts SEPARATOR
+      puts "\n"
     end
   end
 

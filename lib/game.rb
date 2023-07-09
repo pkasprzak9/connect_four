@@ -7,7 +7,7 @@ class Game
   include DataBase
   attr_reader :board, :players, :turn, :winner
 
-  PIECES = %w[x o].freeze
+  PIECES = ["\e[34m\u25cf\e[0m", "\e[33m\u25cf\e[0m"].freeze
 
   def initialize(board, turn = 0)
     @board = board
@@ -97,15 +97,17 @@ class Game
     piece1 = PIECES[0]
     piece2 = PIECES[1]
     player_key = "player#{player}".to_sym
-    puts "\nChoose a piece for player #{player}\nAvailable pieces: '#{piece1}' or '#{piece2}'"
+    puts "\nChoose a piece for player #{player}\nAvailable pieces: '1': #{piece1}' or '2': #{piece2}'"
     loop do
       user_piece = gets.chomp
-      verified_piece = verify_piece(piece1, piece2, user_piece)
+      verified_piece = verify_piece('1', '2', user_piece)
+      verified_piece = "\e[34m\u25cf\e[0m" if verified_piece == '1'
+      verified_piece = "\e[33m\u25cf\e[0m" if verified_piece == '2'
       if verified_piece
         assign_piece(verified_piece, player_key)
         break
       end
-      puts "\nINPUT ERROR: players can choose '#{piece1}' or '#{piece2}' and piece can not be same as other players"
+      puts "\nINPUT ERROR: players can choose '1': #{piece1}' or '2': #{piece2}' and piece can not be same as other players"
     end
   end
 
