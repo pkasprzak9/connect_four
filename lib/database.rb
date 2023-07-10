@@ -13,7 +13,6 @@ module DataBase
       'grid' => @board.grid,
       'player_who_saved' => player_info
     }
-    p player_info
     File.open(SAVE_FILE, 'w') { |f| f.write(game_date.to_yaml) }
   rescue SystemCallError => e
     puts 'Error while saving the progress.'
