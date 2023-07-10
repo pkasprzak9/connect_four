@@ -61,9 +61,18 @@ class Game
     piece2 = PIECES[1]
     player_key = "player#{player}".to_sym
     choose_piece_message(player, piece1, piece2)
+    choose_piece_loop(piece1, piece2, player_key)
+  end
+
+  def choose_piece_loop(piece1, piece2, player_key)
     loop do
       user_piece = gets.chomp
-      verified_piece = verify_piece('1', '2', user_piece)
+      if user_piece == '1'
+        user_piece = piece1
+      elsif user_piece == '2'
+        user_piece = piece2
+      end
+      verified_piece = verify_piece(piece1, piece2, user_piece)
       verified_piece = PIECES[0] if verified_piece == '1'
       verified_piece = PIECES[1] if verified_piece == '2'
       if verified_piece

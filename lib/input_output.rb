@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module InputOutput
   PIECES = ["\e[34m\u25cf\e[0m", "\e[33m\u25cf\e[0m"].freeze
   EMPTY_CELL_COLOR = "\u25cb"
