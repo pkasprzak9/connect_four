@@ -118,6 +118,7 @@ class Game
       answer = verify_answer(gets.chomp)
       if answer == 'yes'
         load_from_YAML
+        board.display_board
         clear_save_file
         return true
       elsif answer == 'no'
