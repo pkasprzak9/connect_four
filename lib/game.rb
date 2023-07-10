@@ -138,7 +138,7 @@ class Game
     game_over = false
     until game_over
       players.each do |player, player_info|
-        row, column = process_player_turn(player_info)
+        row, column = process_player_turn(player, player_info)
         game_over = game_over?(row, column, player_info[:piece])
         board.display_board
         if game_over
@@ -150,13 +150,13 @@ class Game
     end
   end
 
-  def process_player_turn(player_info)
+  def process_player_turn(player, player_info)
     @turn += 1
     display_turn_info(player_info[:name])
 
     player_input = select_column_or_quit
     if player_input == :quit
-      quit_game
+      quit_game(player)
     else
       make_move(player_input, player_info[:piece])
     end
@@ -190,8 +190,8 @@ class Game
     available_columns.include?(column) && !board.column_full?(column)
   end
 
-  def quit_game
-    save_to_YAML if (ask_to_save == 'yes' if @winner.nil?)
+  def quit_game(player)
+    save_to_YAML(player) if (ask_to_save == 'yes' if @winner.nil?)
     quit_message
     exit
   end
