@@ -48,7 +48,7 @@ module InputOutput
   end
 
   def display_winner(player_info)
-    puts "#{player_info[:name]} WINS!"
+    puts "\n#{player_info[:name]} WINS!"
   end
 
   def invalid_column_error
