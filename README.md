@@ -4,13 +4,26 @@ Connect Four is a classic board game where two players take turns dropping their
 
 ## Table of Contents
 
+- [Getting Started](#getting-started)
 - [How to Play](#how-to-play)
 - [Features](#features)
-- [Installation](#installation)
-- [Usage](#usage)
-- [Bugs to be Fixed](#bugs-to-be-fixed)
-- [To-Do](#to-do)
+- [Running the Tests](#running-the-tests)
+- [Bugs and Issues](#bugs-and-issues)
+- [Future Enhancements](#future-enhancements)
 - [Contributing](#contributing)
+
+## Getting Started
+
+To play Connect Four, you need to have Ruby installed on your machine. Follow these steps to get the game running:
+
+1. Clone this repository to your local machine.
+   ```
+   git clone https://github.com/pkasprzak9/connect_four.git
+   ```
+2. Navigate to the repository directory.
+   ```
+   cd connect_four
+   ```
 
 ## How to Play
 
@@ -30,34 +43,19 @@ Connect Four is played on a vertical board, which has seven columns and six rows
 - **Save Game Progress**: Players can save the game progress before quitting.
 - **Error Handling**: The game handles invalid inputs and prompts the user to enter valid data.
 
-## Installation
+## Running the Tests
 
-To play Connect Four, you need to have Ruby installed on your machine. Follow these steps to get the game running:
-
-1. Clone this repository to your local machine.
-   ```
-   git clone https://github.com/pkasprzak9/connect_four.git
-   ```
-2. Navigate to the repository directory.
-   ```
-   cd connect_four
-   ```
-
-## Usage
-
-Run the game by executing the `main.rb` file with Ruby:
+This repository includes a suite of tests to ensure the game is working as expected. To run the tests, navigate to the repository directory and run the following command:
 
 ```
-ruby main.rb
+rspec
 ```
 
-Follow the on-screen instructions to play the game.
+## Bugs and Issues
 
-## Bugs to be Fixed
+As of the latest update, no bugs have been identified. If you encounter any issues while playing the game, please open an issue in this repository.
 
-- Currently, no bugs have been identified.
-
-## To-Do
+## Future Enhancements
 
 - Implement a feature to play against the computer (AI).
 - Add more customization options for players (e.g., custom symbols, board size).
