@@ -20,12 +20,13 @@ class Game
   def play_game
     introduction
     create_players unless (load_game if File.exist?(SAVE_FILE))
+    board.display_board
     turn_order
     if play_again?
       clear_game
       play_game
     end
-    quit_game
+    quit_message
   end
 
   def create_players
