@@ -46,7 +46,7 @@ class Board
   end
 
   def display_board
-    puts "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"
+    40.times { puts "\n" }
     ROWS.times do |row|
       COLUMNS.times do |column|
         if grid[row][column].nil?
