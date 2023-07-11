@@ -46,6 +46,7 @@ class Board
   end
 
   def display_board
+    puts "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"
     ROWS.times do |row|
       COLUMNS.times do |column|
         if grid[row][column].nil?
@@ -57,7 +58,7 @@ class Board
       puts "\n"
     end
     1.upto(COLUMNS) do |i|
-      print "#{i} "
+      print "\e[1m\e[32m#{i} "
     end
     puts "\n"
   end
